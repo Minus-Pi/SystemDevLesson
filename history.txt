@@ -1,0 +1,37 @@
+ls
+exit
+pwd
+ls
+mkdir 20220423
+ls
+pwd
+exit
+sudo yum install vim -y
+ls
+vim 20220507
+ls
+cat 20220507
+vim 20220507
+pwd
+cd /home/ec2-user/20220423
+ls
+cd /home/ec2-user
+ls
+vim test
+ls
+vim ~/.vimrc
+cat ~/.vimrc
+vim ~/.vimrc
+cat ~/.vimrc
+vim ~/.vimrc
+ls
+vim test
+exit
+sudo yum install vim -y
+sudo yum install screen -y
+screen
+ls
+vim 20220507
+vim ~/.vimrc
+history
+history -w history.txt
