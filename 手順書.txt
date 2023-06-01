@@ -1,0 +1,103 @@
+〜以下サービス構築からWebページ閲覧までの流れ〜
+ |
+ |
+ |
+AWSでEC2インスタンスを作成
+
+EC2インスタンスへPCからSSHでログイン
+ターミナルを起動
+ssh ec2-user@パブリックIPv4アドレスを入力 -i ~/Downloads/Saturday12.pem（秘密鍵のパスを入力）
+
+vim, GNU Screenをインストール
+sudo yum install vim -y
+sudo yum install screen -y
+
+Dockerをインストール
+sudo yum install -y docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -a -G docker ec2-user
+
+Docker Composeをインストール
+sudo mkdir -p /usr/local/lib/docker/cli-plugins/
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+Docker Composeの設定ファイルを書く
+mkdir dockertest
+cd dockertest
+vim compose.yml
+
+nginxの設定ファイルを書く
+mkdir nginx
+mkdir nginx/conf.d
+vim nginx/conf.d/default.conf
+
+カレントディレクトリにDockerfileを作成
+vim Dockerfile
+
+PHPの設定ファイルphp.iniを作成
+vim php.ini
+
+配信するファイルを置くディレクトリを作成
+mkdir public
+会員登録フォームを作成
+vim public/signup.php
+vim public/signup_finish.php
+
+ログインフォームを作成
+vim public/login.php
+vim public/login_finish.php
+
+タイムラインを作成
+vim public/timeline.php
+vim public/timeline_json.php
+
+会員一覧画面を作成
+vim public/users.php
+vim public/profile.php
+vim public/follow.php
+
+プロフィール設定画面を作成
+vim public/setting/birthday.php
+vim public/setting/cover.php
+vim public/setting/icon.php
+vim public/setting/index.php
+vim public/setting/introduction.php
+vim public/setting/name.php
+
+Dockerコンテナ「mysql」内のMySQLサーバーに接続
+docker compose exec mysql mysql techc
+
+会員情報を保存するテーブルを作成
+CREATE TABLE `users` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` TEXT NOT NULL,
+    `email` TEXT NOT NULL,
+    `password` TEXT NOT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `introduction` introduction TEXT DEFAULT NULL,
+    `icon_filename` TEXT DEFAULT NULL,
+);
+
+掲示板の投稿を保存するテーブルを作成
+CREATE TABLE `bbs_entries` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT UNSIGNED NOT NULL,
+    `body` TEXT NOT NULL,
+    `image_filename` TEXT DEFAULT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+`birthday` DATE DEFAULT NULL
+);
+
+フォロー関係を管理するテーブルを作成
+CREATE TABLE `user_relationships` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `followee_user_id` INT UNSIGNED NOT NULL,
+    `follower_user_id` INT UNSIGNED NOT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+docker compose upでコンテナを立ち上げる
+
+http:// 54.234.150.77/timeline.phpにアクセス
